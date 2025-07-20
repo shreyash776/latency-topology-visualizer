@@ -1,0 +1,28 @@
+export const SERVER_MAPPING: Record<string, {
+  provider: 'AWS' | 'GCP' | 'Azure' | 'Alibaba Cloud',
+  location: string,
+  lat: number,
+  lng: number,
+}> = {
+  Binance:    { provider: 'AWS',           location: 'Tokyo',        lat: 35.6895,   lng: 139.6917 },
+  Bybit:      { provider: 'AWS',           location: 'Singapore',    lat: 1.3521,    lng: 103.8198 },
+  OKX:        { provider: 'Alibaba Cloud', location: 'Hong Kong',    lat: 22.3193,   lng: 114.1694 },
+  Deribit:    { provider: 'AWS',           location: 'London',       lat: 51.5074,   lng: -0.1278 },
+  Bitfinex:   { provider: 'AWS',           location: 'New York',     lat: 40.7128,   lng: -74.0060 },
+  Huobi:      { provider: 'AWS',           location: 'Singapore',    lat: 1.3521,    lng: 103.8198 },
+  Coinbase:   { provider: 'AWS',           location: 'San Francisco',lat: 37.7749,   lng: -122.4194 },
+  Kraken:     { provider: 'AWS',           location: 'Chicago',      lat: 41.8781,   lng: -87.6298 },
+  Bitstamp:   { provider: 'Azure',         location: 'Luxembourg',   lat: 49.6117,   lng: 6.1319 },
+  Gemini:     { provider: 'AWS',           location: 'New York',     lat: 40.7128,   lng: -74.0060 },
+  MEXC:       { provider: 'GCP',           location: 'Singapore',    lat: 1.3521,    lng: 103.8198 },
+  FTX:        { provider: 'AWS',           location: 'Dallas',       lat: 32.7767,   lng: -96.7970 },
+  Poloniex:   { provider: 'AWS',           location: 'Virginia',     lat: 37.4316,   lng: -78.6569 },
+  "Gate.io":    { provider: 'Alibaba Cloud', location: 'Beijing',      lat: 39.9042,   lng: 116.4074 },
+  BitMex:     { provider: 'AWS',           location: 'Seattle',      lat: 47.6062,   lng: -122.3321 },
+  KuCoin:     { provider: 'Azure',         location: 'Amsterdam',    lat: 52.3676,   lng: 4.9041 },
+  "Crypto.com": { provider: 'AWS',           location: 'Sydney',       lat: -33.8688,  lng: 151.2093 },
+  Bittrex:    { provider: 'AWS',           location: 'Virginia',     lat: 37.4316,   lng: -78.6569 },
+  BitFlyer:   { provider: 'Azure',         location: 'Tokyo',        lat: 35.6895,   lng: 139.6917 },
+  OKCoin:     { provider: 'Alibaba Cloud', location: 'Hangzhou',     lat: 30.2741,   lng: 120.1551 },
+  Bitbank:    { provider: 'GCP',           location: 'Tokyo',        lat: 35.6895,   lng: 139.6917 }
+};
