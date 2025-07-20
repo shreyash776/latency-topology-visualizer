@@ -54,6 +54,7 @@ export default function LatencyLines({ map, exchanges, latency, setTargetEndpoin
             color: getLineColor(latencyMs),
             exName: exchange.name,
             country: exchange.country,
+             image: exchange.image,
           }
         } as GeoJSON.Feature<GeoJSON.LineString, GeoJSON.GeoJsonProperties>;
       })
@@ -87,13 +88,35 @@ export default function LatencyLines({ map, exchanges, latency, setTargetEndpoin
       if (!feature || !feature.properties) return;
       new mapboxgl.Popup()
         .setLngLat((feature.geometry as any).coordinates[1])
-        .setHTML(
-          `<div style="padding:11px 18px;font-size:15px;">
-            <b>${feature.properties.exName}</b><br/>
-            <span style="margin-top:9px;display:inline-block;">Latency: <b style="color:${feature.properties.color}">${feature.properties.latencyMs} ms</b></span><br/>
-            <span style="font-size:13px;color:#666;">Country: ${feature.properties.country}</span>
-          </div>`
-        )
+        .setHTML(`
+  <div style="
+    box-sizing:border-box;
+    background:#fff;
+    color:#222;
+    font-family:'Segoe UI',sans-serif;
+    border-radius:14px;
+    padding:12px 10px;
+    min-width:120px;
+    max-width:85vw;
+    width:auto;
+    box-shadow:0 2px 16px #1d1d1d15;
+    word-break:break-word;
+    white-space:normal;
+    ">
+    <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
+      <img src="${feature.properties.image}" alt="${feature.properties.exName}"
+        width="21" height="21" style="border-radius:50%;max-width:18vw;height:auto;box-shadow:0 0 3px #bbb;" />
+      <b style="font-size:13px;color:#000;">${feature.properties.exName}</b>
+    </div>
+    <div style="margin-top:6px;margin-bottom:3px;font-size:13px;color:#000;">
+      Latency: <b style="color:${feature.properties.color}">${feature.properties.latencyMs} ms</b>
+    </div>
+    <span style="font-size:12px;color:#000;">
+      Country: ${feature.properties.country}
+    </span>
+  </div>
+`)
+
         .addTo(map);
     });
 

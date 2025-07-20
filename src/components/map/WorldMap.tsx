@@ -79,6 +79,7 @@ export default function WorldMap() {
   map={mapRef.current}
   exchanges={exchanges}
   latency={latency}
+  
   setTargetEndpoints={setTargetEndpoints}
 />
          
