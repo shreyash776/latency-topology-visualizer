@@ -5,8 +5,8 @@ import { SERVER_MAPPING } from '../../data/serverMapping';
 import ExchangeMarkers, { Exchange } from './ExchangeMarkers';
 import LatencyLines from './LatencyLines';
 import MapLegend from './MapLegend';
-
-
+// import ReferenceRegionMarkers from './ReferenceRegionMarkers';
+import DynamicRegionMarkers from './DynamicRegionMarkers';
 type CountryLatency = { [country: string]: number; };
 
 export default function WorldMap() {
@@ -14,6 +14,8 @@ export default function WorldMap() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const [exchanges, setExchanges] = useState<Exchange[]>([]);
   const [latency, setLatency] = useState<CountryLatency>({});
+  const [targetEndpoints, setTargetEndpoints] = useState<[number, number][]>([]);
+
 
   
   useEffect(() => {
@@ -73,7 +75,14 @@ export default function WorldMap() {
       {mapRef.current && (
         <>
           <ExchangeMarkers map={mapRef.current} exchanges={exchanges} />
-          <LatencyLines map={mapRef.current} exchanges={exchanges} latency={latency} />
+          <LatencyLines
+  map={mapRef.current}
+  exchanges={exchanges}
+  latency={latency}
+  setTargetEndpoints={setTargetEndpoints}
+/>
+         
+          <DynamicRegionMarkers map={mapRef.current} endpoints={targetEndpoints} />
         </>
       )}
       <MapLegend />

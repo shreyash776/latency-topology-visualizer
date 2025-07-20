@@ -4,7 +4,6 @@ import { SERVER_MAPPING } from '../../data/serverMapping';
 import { Exchange } from './ExchangeMarkers';
 import { getLineColor } from '../../utils/mapHelpers';
 
-
 const countryCodeMap: Record<string, string> = {
   'Singapore': 'SG', 'Japan': 'JP', 'Hong Kong': 'HK', 'United Kingdom': 'GB', 'Germany': 'DE', 'Netherlands': 'NL',
   'Luxembourg': 'LU', 'United States': 'US', 'Australia': 'AU', 'China': 'CN',
@@ -16,28 +15,38 @@ type Props = {
   map: mapboxgl.Map | null;
   exchanges: Exchange[];
   latency: Latency;
+  setTargetEndpoints?: (endpoints: [number, number][]) => void; 
 };
 
-export default function LatencyLines({ map, exchanges, latency }: Props) {
+export default function LatencyLines({ map, exchanges, latency, setTargetEndpoints }: Props) {
   useEffect(() => {
     if (!map) return;
     if (map.getSource('latency-lines')) {
       map.removeLayer('latency-lines');
       map.removeSource('latency-lines');
     }
-    const features = exchanges
+
+    
+    const targetPointsSet = new Set<string>();
+
+    const features: GeoJSON.Feature<GeoJSON.LineString, GeoJSON.GeoJsonProperties>[] = exchanges
       .map((exchange) => {
         const server = SERVER_MAPPING[exchange.name];
         if (!server) return null;
         let cc = countryCodeMap[exchange.country || ''] || 'US';
         const latencyMs = latency[cc] ?? 100;
+
+        
+        const targetCoords: [number, number] = [server.lng, server.lat + 13];
+        targetPointsSet.add(JSON.stringify(targetCoords));
+
         return {
-          type: "Feature" as "Feature",
+          type: "Feature",
           geometry: {
-            type: "LineString" as "LineString",
+            type: "LineString",
             coordinates: [
               [server.lng, server.lat],
-              [server.lng, server.lat + 13]
+              targetCoords
             ]
           },
           properties: {
@@ -46,9 +55,15 @@ export default function LatencyLines({ map, exchanges, latency }: Props) {
             exName: exchange.name,
             country: exchange.country,
           }
-        };
+        } as GeoJSON.Feature<GeoJSON.LineString, GeoJSON.GeoJsonProperties>;
       })
-      .filter(f => f !== null);
+      .filter((f): f is GeoJSON.Feature<GeoJSON.LineString, GeoJSON.GeoJsonProperties> => f !== null);
+
+   
+    if (setTargetEndpoints) {
+      const uniqueEndpoints = Array.from(targetPointsSet).map(str => JSON.parse(str));
+      setTargetEndpoints(uniqueEndpoints);
+    }
 
     map.addSource('latency-lines', {
       type: 'geojson',
@@ -88,7 +103,7 @@ export default function LatencyLines({ map, exchanges, latency }: Props) {
         map.removeSource('latency-lines');
       }
     };
-  }, [map, exchanges, latency]);
+  }, [map, exchanges, latency, setTargetEndpoints]);
 
   return null;
 }
